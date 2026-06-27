@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if ordered == "success" %}
+    <div class="banner-success">
+        <span style="font-size: 1.8rem;">🎉</span>
+        <div>
+            <strong style="display:block; margin-bottom: 0.2rem; color:#fff;">Payment Successful!</strong>
+            Your order is confirmed. Shipping details have been sent. You'll receive a tracking number by email.
+        </div>
+    </div>
+    {% elif ordered == "cancel" %}
+    <div class="banner-cancel">
+        <span style="font-size: 1.8rem;">ℹ️</span>
+        <div>
+            <strong style="display:block; margin-bottom: 0.2rem; color:#fff;">Order Cancelled</strong>
+            The checkout session was closed and your order was not completed.
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="hero">
+        <h1>National Team <span>Football Jerseys</span></h1>
+        <p>Premium quality jerseys from the world's greatest football nations. Country crests, custom names, fast worldwide shipping.</p>
+    </div>
+
+    {% if products %}
+    <!-- Country Filter Bar -->
+    <div class="filter-bar" id="filterBar">
+        <button class="filter-pill active" data-country="all" onclick="filterByCountry('all', this)">
+            🌍 All Countries
+        </button>
+        {% set countries_seen = [] %}
+        {% for prod in products %}
+            {% if prod.country and prod.country not in countries_seen %}
+                {% if countries_seen.append(prod.country) %}{% endif %}
+                <button class="filter-pill" data-country="{{ prod.country }}" onclick="filterByCountry('{{ prod.country }}', this)">
+                    {% if prod.country == 'Argentina' %}🇦🇷
+                    {% elif prod.country == 'Brazil' %}🇧🇷
+                    {% elif prod.country == 'France' %}🇫🇷
+                    {% elif prod.country == 'Germany' %}🇩🇪
+                    {% elif prod.country == 'Spain' %}🇪🇸
+                    {% elif prod.country == 'Portugal' %}🇵🇹
+                    {% elif prod.country == 'Italy' %}🇮🇹
+                    {% elif prod.country == 'Japan' %}🇯🇵
+                    {% elif prod.country == 'Mexico' %}🇲🇽
+                    {% elif prod.country == 'Nigeria' %}🇳🇬
+                    {% elif prod.country == 'Netherlands' %}🇳🇱
+                    {% elif prod.country == 'England' %}🏴󠁧󠁢󠁥󠁮󠁧󠁿
+                    {% elif prod.country == 'Colombia' %}🇨🇴
+                    {% elif prod.country == 'Croatia' %}🇭🇷
+                    {% else %}⚽
+                    {% endif %}
+                    {{ prod.country }}
+                </button>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if not products %}
+        <div class="empty-state">
+            <span class="empty-icon">⚽</span>
+            <h3>No Jerseys Available Yet</h3>
+            <p>Our catalog is being refreshed with the latest national team jerseys. Check back in a few moments!</p>
+        </div>
+    {% else %}
+        <div class="grid" id="productGrid">
+            {% for prod in products %}
+            <div class="card" data-country="{{ prod.country if prod.country else 'Unknown' }}">
+                <div class="img-container">
+                    {% if prod.country %}
+                    <span class="country-badge">
+                        {% if prod.country == 'Argentina' %}🇦🇷
+                        {% elif prod.country == 'Brazil' %}🇧🇷
+                        {% elif prod.country == 'France' %}🇫🇷
+                        {% elif prod.country == 'Germany' %}🇩🇪
+                        {% elif prod.country == 'Spain' %}🇪🇸
+                        {% elif prod.country == 'Portugal' %}🇵🇹
+                        {% elif prod.country == 'Italy' %}🇮🇹
+                        {% elif prod.country == 'Japan' %}🇯🇵
+                        {% elif prod.country == 'Mexico' %}🇲🇽
+                        {% elif prod.country == 'Nigeria' %}🇳🇬
+                        {% elif prod.country == 'Netherlands' %}🇳🇱
+                        {% elif prod.country == 'England' %}🏴󠁧󠁢󠁥󠁮󠁧󠁿
+                        {% elif prod.country == 'Colombia' %}🇨🇴
+                        {% elif prod.country == 'Croatia' %}🇭🇷
+                        {% else %}⚽
+                        {% endif %}
+                        {{ prod.country }}
+                    </span>
+                    {% endif %}
+                    <img src="{{ prod.image_urls[0] if prod.image_urls else 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=600&auto=format&fit=crop&q=60' }}" alt="{{ prod.title }}" loading="lazy">
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title" title="{{ prod.title }}">{{ prod.title }}</h3>
+                    <div class="product-desc">
+                        {{ prod.description if prod.description else 'Premium quality national team football jersey.' }}
+                    </div>
+                    <div class="card-footer">
+                        <span class="price-tag"><span class="price-symbol">€</span>{{ "%.2f"|format(prod.final_price_eur) }}</span>
+                        <button class="buy-btn" onclick="window.location.href='/checkout?url=' + encodeURIComponent('{{ prod.scraped_url }}')">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+<script>
+function filterByCountry(country, btn) {
+    // Update active pill
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    
+    // Filter cards
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        if (country === 'all' || card.dataset.country === country) {
+            card.style.display = '';
+            card.style.animation = 'fadeUp 0.5s ease-out forwards';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+redis
+fakeredis
+stripe
+jinja2
+python-multipart

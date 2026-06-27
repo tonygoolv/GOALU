@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:alpine
+    container_name: dropship_redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  web_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dropship_web_app
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+    restart: unless-stopped

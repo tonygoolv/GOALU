@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GOALU — National Team Football Jerseys{% endblock %}</title>
+    <meta name="description" content="Shop premium national team football jerseys from around the world. Argentina, Brazil, France, Germany, Spain and more. Affordable prices, fast shipping.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">GOAL<span class="logo-accent">U</span><span class="logo-dot"></span></a>
+        <nav class="header-nav">
+            <span class="badge-live">⚽ Live Catalog</span>
+        </nav>
+    </header>
+    
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <p class="footer-brand">GOAL<span style="color: var(--accent-green);">U</span></p>
+            <p>&copy; 2025 GOALU. National team jerseys from around the world.</p>
+        </div>
+    </footer>
+</body>
+</html>
